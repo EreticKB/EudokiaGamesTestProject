@@ -12,14 +12,10 @@ public class MonsterPool
         _poolSize = 100;
     }
 
-    public MonsterPool(int size, GameObject filler)
+    public MonsterPool(int size)
     {
         if (size == 0) size = 1;
         _poolSize = size;
-        for (int i = 0; i < Math.Min(size, 10); i++)
-        {
-            _monsterPool.Push(filler);
-        }
     }
     public GameObject PullMonster()
     {
