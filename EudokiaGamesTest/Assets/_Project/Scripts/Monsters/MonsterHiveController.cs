@@ -7,25 +7,29 @@ public class MonsterHiveController : MonoBehaviour
     [SerializeField] GameObject[] _monsters;
     [SerializeField] Transform _monsterParent;
     [SerializeField] Transform[] _navPoints;
+    public int MonsterOnField { get; private set; }
 
 
     void Start()
     {
+        MonsterOnField = 0;
         _monsterPool = new MonsterPool[_monsters.Length];
         for (int i = 0; i < _monsterPool.Length; i++) _monsterPool[i] = new MonsterPool(_poolSize);
     }
 
-    public void SpawnMonster()
+    public void SpawnMonster(int difficulty)
     {
         int monsterType = Random.Range(0, _monsters.Length);
         GameObject monster = _monsterPool[monsterType].PullMonster()?.gameObject ?? Instantiate(_monsters[monsterType], _monsterParent);
         monster.transform.SetParent(_monsterParent);
         monster.transform.position = _navPoints[Random.Range(0, _navPoints.Length)].position;
-        monster.GetComponent<MonsterController>()._overMind = this;
+        monster.GetComponent<MonsterController>().Initialise(this, difficulty);
+        MonsterOnField++;
     }
 
     public void ForfeitMoster(int monsterType, GameObject monster)
     {
+        MonsterOnField--;
         if (_monsterPool[monsterType].PushMonster(monster)) return;
         Destroy(monster);
     }

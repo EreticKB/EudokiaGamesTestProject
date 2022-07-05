@@ -4,17 +4,42 @@ using UnityEngine.AI;
 public class MonsterController : MonoBehaviour
 {
     [SerializeField] NavMeshAgent _AI;
-    internal MonsterHiveController _overMind;
+     MonsterHiveController _overMind;
     [SerializeField] float _goalCompleteRadius;
+    [SerializeField] Animator _animator;
     [SerializeField] MonsterTypeID _ID;
+    [SerializeField] float _initialSpeed;
+    [SerializeField]int _monsterHP;
+    bool _initialised;
 
-    private void Start()
-    {
-        _AI.destination =_overMind.GetNewNavPoint().position;
-        Debug.Log($"{_AI.destination} + {_ID.GetID()}");
-    }
     private void Update()
     {
-        if (Vector3.SqrMagnitude(transform.position - _AI.destination) < _goalCompleteRadius * _goalCompleteRadius) Start();
+        if (!_initialised) return;
+        if (Vector3.SqrMagnitude(transform.position - _AI.destination) < _goalCompleteRadius * _goalCompleteRadius) GetNewGoal();
+        if (_monsterHP < 1) _overMind.ForfeitMoster(_ID.GetID(), gameObject);
+    }
+    
+    public void Initialise(MonsterHiveController hive, int difficulty)
+    {
+        _overMind = hive;
+        GetNewGoal();
+        _animator.SetBool("Walking", true);
+        int size = Random.Range(1, 3);
+        transform.localScale = new Vector3(size, size, size);
+        _AI.speed = (_initialSpeed * difficulty) / (2 * size);
+        _monsterHP = difficulty + size - 1;
+        _initialised = true;
+    }
+    private void GetNewGoal()
+    {
+        _AI.destination = _overMind.GetNewNavPoint().position;
+    }
+    internal void Hit()
+    {
+        _monsterHP--;
+    }
+    private void OnDisable()
+    {
+        _initialised = false;
     }
 }

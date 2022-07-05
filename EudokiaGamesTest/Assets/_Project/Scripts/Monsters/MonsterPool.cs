@@ -20,7 +20,9 @@ public class MonsterPool
     public GameObject PullMonster()
     {
         if (_monsterPool.Count == 0) return null;
-        return _monsterPool.Pop();
+        GameObject monster = _monsterPool.Pop();
+        monster.SetActive(true);
+        return monster;
     }
 
     public bool PushMonster(GameObject monster)
