@@ -1,7 +1,7 @@
-Banana - Freeze Spawn for 3 seconds
-Burger - Freeze monsters for 3 to 8 seconds
+Banana - Freeze Spawn for 3 seconds. DONE!
+Burger - Freeze monsters for 3 to 8 seconds. DONE!
 HotDog - Lure all existing monsters to it's position
 WaterMelon - Hit all monsters on field.
 Cherry - Give player some points
-Cheese - Bad Trip
-Olive - Slow All existing monsters
+Cheese - Bad Trip. DONE!
+Olive - Slow All existing monsters. DONE!

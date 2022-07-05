@@ -11,6 +11,7 @@ public class BadTripController : MonoBehaviour
     Sequence sequence;
     float _messagesDelay;
     float _pastaMonsterLookAtYouTimer;
+    float _lifeSpan;
 
 
     private void Awake()
@@ -29,9 +30,15 @@ public class BadTripController : MonoBehaviour
         //  _colorFilter.DOColor("FFFFFF", 1); CS1929 нет времени выяснять, где баг вылез.
     }
 
+    public void Extend()
+    {
+        _lifeSpan += 5f;
+    }
+
     private void OnEnable()
     {
         _messagesDelay = 0.5f;
+        _lifeSpan += 5f;
         sequence.Play();
     }
     private void OnDisable()
@@ -41,12 +48,14 @@ public class BadTripController : MonoBehaviour
 
     private void Update()
     {
+        _lifeSpan -= Time.deltaTime;
+        if (_lifeSpan < 0) gameObject.SetActive(false);
         _pastaMonsterLookAtYouTimer -= Time.deltaTime;
         _messagesDelay -= Time.deltaTime;
         if (_messagesDelay < 0)
         {
             _messagesDelay = 2.1f;
-            Instantiate(_text, transform).transform.position = new Vector2(Random.Range(Screen.width*0.15f, Screen.width * 0.85f), Random.Range(Screen.height * 0.15f, Screen.height * 0.85f));
+            Instantiate(_text, transform).transform.position = new Vector2(Random.Range(Screen.width * 0.15f, Screen.width * 0.85f), Random.Range(Screen.height * 0.15f, Screen.height * 0.85f));
             if (Random.Range(0, 1000f) > 750f) _colorFilter.sprite = _monster;
             _pastaMonsterLookAtYouTimer = 0.25f;
         }

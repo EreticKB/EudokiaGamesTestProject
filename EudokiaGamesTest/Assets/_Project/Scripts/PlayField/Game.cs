@@ -49,5 +49,9 @@ public class Game : MonoBehaviour
         _monstersHive.SpawnMonster(_difficultyCounter / 10 + 1);
     }
 
+    public void ExtendSpawnDelay(float time)
+    {
+        _spawnDelayTimer -= time;
+    }
 
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,8 +20,10 @@ public class MonsterController : MonoBehaviour
         if (_monsterHP < 1) _overMind.ForfeitMoster(_ID.GetID(), gameObject);
     }
     
-    public void Initialise(MonsterHiveController hive, int difficulty)
+    internal void Initialise(MonsterHiveController hive, int difficulty)
     {
+        _AI.enabled = true;
+        _animator.enabled = true;
         _overMind = hive;
         GetNewGoal();
         _animator.SetBool("Walking", true);
@@ -34,6 +37,31 @@ public class MonsterController : MonoBehaviour
     {
         _AI.destination = _overMind.GetNewNavPoint().position;
     }
+
+    internal void Slow()
+    {
+        _AI.speed -= _AI.speed / 2;
+    }
+
+    internal void Freeze()
+    {
+        StopAllCoroutines();
+        _AI.enabled = false;
+        _animator.enabled = false;
+        StartCoroutine(UnFreeze(Random.Range(3,8)));
+    }
+    
+    IEnumerator UnFreeze(float timer)
+    {
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+        _AI.enabled = true;
+        _animator.enabled = true;
+    }
+
     internal void Hit()
     {
         _monsterHP--;
@@ -41,5 +69,10 @@ public class MonsterController : MonoBehaviour
     private void OnDisable()
     {
         _initialised = false;
+    }
+
+    internal void Lure()
+    {
+        _AI.destination = Vector3.zero;
     }
 }

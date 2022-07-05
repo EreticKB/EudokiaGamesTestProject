@@ -45,5 +45,7 @@ public class MonsterHiveController : MonoBehaviour
         {
             Gizmos.DrawSphere(checkPoint.position, .5f);
         }
+        Gizmos.color = Color.blue;
+        //Gizmos.DrawSphere(transform.position, 10f);
     }
 }

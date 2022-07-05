@@ -3,6 +3,7 @@ using UnityEngine;
 public class BoosterDisabling : MonoBehaviour
 {
     [SerializeField]float _lifespan;
+    [SerializeField] string _name;
 
     private void Update()
     {
@@ -13,7 +14,8 @@ public class BoosterDisabling : MonoBehaviour
 
     public void Activate()
     {
-        //GetComponentInParent<BoosterActivateHandler>();
+        GetComponentInParent<BoosterActivateHandler>().UseBooster(_name);
+        Destroy(gameObject);
     }
 
 }

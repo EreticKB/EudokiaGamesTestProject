@@ -46,6 +46,7 @@ public class UIController : MonoBehaviour
             sequence.Append(indicator.DOLocalJump(indicator.localPosition + new Vector3(Screen.width * 0.1f, Screen.height * 0.1f, 0), 2, 1, 1f)).
                 Join(indicator.DOScale(new Vector3(0.2f, .2f, 1), 1f)).OnKill(() => Destroy(indicator.gameObject));
         }
+        if (hit.collider.CompareTag("Booster")) hit.collider.GetComponent<BoosterDisabling>().Activate();
 
     }
 
