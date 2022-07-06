@@ -5,6 +5,7 @@ public class MonsterHiveController : MonoBehaviour
     MonsterPool[] _monsterPool;
     [SerializeField] int _poolSize;
     [SerializeField] GameObject[] _monsters;
+    [SerializeField] Game _game;
     [SerializeField] Transform _monsterParent;
     [SerializeField] Transform[] _navPoints;
     public int MonsterOnField { get; private set; }
@@ -17,7 +18,7 @@ public class MonsterHiveController : MonoBehaviour
         for (int i = 0; i < _monsterPool.Length; i++) _monsterPool[i] = new MonsterPool(_poolSize);
     }
 
-    public void SpawnMonster(int difficulty)
+    public void SpawnMonster(int difficulty) //предпочел сделать случайный спавн из нескольких контроллируемых точек во избежание застреваний, бустеры полностью на рандоме.
     {
         int monsterType = Random.Range(0, _monsters.Length);
         GameObject monster = _monsterPool[monsterType].PullMonster()?.gameObject ?? Instantiate(_monsters[monsterType], _monsterParent);
@@ -30,6 +31,7 @@ public class MonsterHiveController : MonoBehaviour
     public void ForfeitMoster(int monsterType, GameObject monster)
     {
         MonsterOnField--;
+        _game.AddPoints(50);    
         if (_monsterPool[monsterType].PushMonster(monster)) return;
         Destroy(monster);
     }
@@ -37,6 +39,11 @@ public class MonsterHiveController : MonoBehaviour
     public Transform GetNewNavPoint()
     {
         return _navPoints[Random.Range(0, _navPoints.Length)];
+    }
+
+    internal void AddPoints(int points)
+    {
+        _game.AddPoints(10);
     }
     void OnDrawGizmos()
     {
@@ -48,4 +55,5 @@ public class MonsterHiveController : MonoBehaviour
         Gizmos.color = Color.blue;
         //Gizmos.DrawSphere(transform.position, 10f);
     }
+
 }

@@ -15,6 +15,7 @@ public class BoosterSpawner : MonoBehaviour
     }
     private void Update()
     {
+        if (_gameScript.Status != Game.GameState.Playing) return;
         _spawnDelayTimer -= Time.deltaTime;
         if (_spawnDelayTimer > 0) return;
         _spawnDelayTimer = Random.Range(_spawnDelayBase * 0.25f, 2 * _spawnDelayBase);

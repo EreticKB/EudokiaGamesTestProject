@@ -9,7 +9,6 @@ namespace SerializedStructContainer
     public struct SerializableRecordList
     {
         public List<Record> Records;
-
         public SerializableRecordList(List<Record> list)
         {
             Records = list;
@@ -34,15 +33,21 @@ namespace SerializedStructContainer
         }
 
     }
-    public struct Record
+    [System.Serializable]
+    public struct Record :IComparable<Record>
     {
-        public string Points;
+        public int Points;
         public string Name;
 
         public Record(int points, string name)
         {
-            Points = points.ToString();
+            Points = points;
             Name = name;
+        }
+
+        public int CompareTo(Record other)
+        {
+           return other.Points.CompareTo(Points);
         }
 
         public override string ToString()

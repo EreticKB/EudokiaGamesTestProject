@@ -65,6 +65,7 @@ public class MonsterController : MonoBehaviour
     internal void Hit()
     {
         _monsterHP--;
+        _overMind.AddPoints(10);
     }
     private void OnDisable()
     {

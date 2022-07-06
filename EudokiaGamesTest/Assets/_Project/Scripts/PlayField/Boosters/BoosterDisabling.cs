@@ -14,7 +14,7 @@ public class BoosterDisabling : MonoBehaviour
 
     public void Activate()
     {
-        GetComponentInParent<BoosterActivateHandler>().UseBooster(_name);
+        GetComponentInParent<BoosterActivateHandler>().HandleBooster(_name);
         Destroy(gameObject);
     }
 

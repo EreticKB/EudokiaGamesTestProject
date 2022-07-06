@@ -8,6 +8,7 @@ public class BadTripController : MonoBehaviour
     [SerializeField] Image _colorFilter;
     [SerializeField] TextMeshProUGUI _text;
     [SerializeField] Sprite _monster;
+    [SerializeField] AudioClip[] _sounds;
     Sequence sequence;
     float _messagesDelay;
     float _pastaMonsterLookAtYouTimer;
@@ -37,12 +38,16 @@ public class BadTripController : MonoBehaviour
 
     private void OnEnable()
     {
+        Camera.main.GetComponent<AudioSource>().clip = _sounds[0];
+        Camera.main.GetComponent<AudioSource>().Play();
         _messagesDelay = 0.5f;
         _lifeSpan += 5f;
         sequence.Play();
     }
     private void OnDisable()
     {
+        Camera.main.GetComponent<AudioSource>().clip = _sounds[1];
+        Camera.main.GetComponent<AudioSource>().Play();
         sequence.Pause();
     }
 

@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float _zMinLimit;
     [SerializeField] float _speed;
     Vector3 _mousePreviousPosition;
+    bool firstTouch;
 
 
     void Update()
@@ -16,12 +17,15 @@ public class CameraController : MonoBehaviour
         if (_game.Status != Game.GameState.Playing) return;
         if (Input.GetMouseButton(0))
         {
+
             Vector3 delta = Input.mousePosition - _mousePreviousPosition;
             Vector3 newPosition = transform.position;
             newPosition.x = Mathf.Clamp(newPosition.x + delta.y * _speed, _xMinLimit, _xMaxLimit);
             newPosition.z = Mathf.Clamp(newPosition.z - delta.x * _speed, _zMinLimit, _zMaxLimit);
-            transform.position = newPosition;
+            if (firstTouch) firstTouch = false;
+            else transform.position = newPosition;
         }
+        else firstTouch = true;
         _mousePreviousPosition = Input.mousePosition;
     }
 }

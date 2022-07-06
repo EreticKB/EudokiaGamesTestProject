@@ -1,16 +1,17 @@
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
-using System;
+using System.Text;
 
 public class UIController : MonoBehaviour
 {
     [SerializeField] Game _game;
-    [SerializeField] GameObject _startButton;
     [SerializeField] GameObject _hitIndicator;
     [SerializeField] TextMeshProUGUI _HPBoost;
     [SerializeField] TextMeshProUGUI _monsterCounter;
-
+    [SerializeField] TextMeshProUGUI _totalPoints;
+    [SerializeField] AudioSource _audioSource;
+    public readonly string RecordSaveSlotName = "SaveRecord";
     int _difficulty;
     int _monsterLimit;
     int _monsterOnField;
@@ -19,7 +20,6 @@ public class UIController : MonoBehaviour
     public void GameStart()
     {
         _game.Status = Game.GameState.Playing;
-        _startButton.SetActive(false);
     }
 
     private void Update()
@@ -27,9 +27,23 @@ public class UIController : MonoBehaviour
         if (_game.Status == Game.GameState.Playing)
         {
             colliderInteraction();
-            _HPBoost.text = $"Monster HP: +{_difficulty}";
-            _monsterCounter.text = $"Monster: {_monsterOnField}/{_monsterLimit}";
-
+            StringBuilder builder = new StringBuilder();
+            //Extra HP for new monsters UI;
+            builder.Append("Monster HP: +");
+            builder.Append(_difficulty.ToString());
+            _HPBoost.text = builder.ToString();
+            builder.Clear();
+            //Monster counter UI;
+            builder.Append("Monster: ");
+            builder.Append(_monsterOnField.ToString());
+            builder.Append('/');
+            builder.Append(_monsterLimit.ToString());
+            _monsterCounter.text = builder.ToString();
+            builder.Clear();
+            //Point UI;
+            builder.Append(_game.Points.ToString());
+            builder.Append(" pts");
+            _totalPoints.text = builder.ToString();
         }
     }
 
@@ -39,6 +53,7 @@ public class UIController : MonoBehaviour
         if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, 8)) return;
         if (hit.collider.CompareTag("Monster"))
         {
+            _audioSource.Play();
             hit.collider.GetComponent<MonsterController>().Hit();
             Transform indicator = Instantiate(_hitIndicator, transform).transform;
             indicator.position = Input.mousePosition;
@@ -55,5 +70,11 @@ public class UIController : MonoBehaviour
         _monsterOnField = monsterOnField;
         _monsterLimit = monsterLimit;
         _difficulty = difficulty;
+    }
+    
+
+    public void CloseGame()
+    {
+        Application.Quit();
     }
 }
